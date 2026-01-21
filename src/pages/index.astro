@@ -986,7 +986,7 @@ const siteConfig = {
         bottom: 0;
         left: 0;
         right: 0;
-        height: 25vh;
+        height: 35vh;
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
@@ -997,73 +997,83 @@ const siteConfig = {
       .seat-row {
         display: flex;
         justify-content: center;
-        gap: 8px;
-        padding: 0 10%;
+        gap: 20px;
+        padding: 0 5%;
       }
 
       .seat-row-1 {
-        margin-bottom: -15px;
-        transform: scale(0.75);
-        opacity: 0.4;
+        margin-bottom: -30px;
+        transform: scale(0.6);
+        opacity: 0.3;
       }
 
       .seat-row-2 {
-        margin-bottom: -10px;
-        transform: scale(0.85);
-        opacity: 0.6;
+        margin-bottom: -20px;
+        transform: scale(0.8);
+        opacity: 0.5;
       }
 
       .seat-row-3 {
         transform: scale(1);
-        opacity: 0.9;
+        opacity: 1;
       }
 
       .seat {
-        width: 40px;
-        height: 50px;
-        background: #1a1a1a;
-        border-radius: 8px 8px 4px 4px;
+        width: 80px;
+        height: 100px;
+        background: #151515;
+        border-radius: 12px 12px 6px 6px;
         position: relative;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
       }
 
+      /* Seat back */
       .seat::before {
         content: '';
         position: absolute;
-        bottom: 0;
+        top: 0;
         left: 50%;
         transform: translateX(-50%);
-        width: 30px;
-        height: 8px;
-        background: #111;
-        border-radius: 4px;
+        width: 70px;
+        height: 60px;
+        background: #1a1a1a;
+        border-radius: 10px 10px 0 0;
       }
 
-      .seat::after {
-        content: '';
-        position: absolute;
-        top: 8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 28px;
-        height: 20px;
-        background: #222;
-        border-radius: 4px 4px 0 0;
-      }
-
-      .seat.occupied::after {
-        background: #333;
-        height: 25px;
-        top: 3px;
-        border-radius: 50% 50% 4px 4px;
-      }
-
-      .seat.you {
+      /* Occupied seat - person silhouette */
+      .seat.occupied {
         position: relative;
       }
 
-      .seat.you::before {
-        box-shadow: 0 0 15px rgba(234, 67, 53, 0.5);
+      /* Head */
+      .seat.occupied::after {
+        content: '';
+        position: absolute;
+        top: -45px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 35px;
+        height: 40px;
+        background: #0d0d0d;
+        border-radius: 50% 50% 45% 45%;
+      }
+
+      /* Shoulders - using box-shadow for the body */
+      .seat.occupied::before {
+        content: '';
+        position: absolute;
+        top: -15px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 65px;
+        height: 40px;
+        background: #0d0d0d;
+        border-radius: 30px 30px 0 0;
+        z-index: 1;
+      }
+
+      /* Special highlight for "you" seat */
+      .seat.you::after {
+        box-shadow: 0 0 20px rgba(234, 67, 53, 0.3);
       }
 
       /* Responsive Cinema */
@@ -1087,16 +1097,33 @@ const siteConfig = {
         }
 
         .cinema-seats {
-          height: 18vh;
+          height: 30vh;
         }
 
         .seat {
-          width: 28px;
-          height: 35px;
+          width: 50px;
+          height: 65px;
+        }
+
+        .seat::before {
+          width: 44px;
+          height: 40px;
+        }
+
+        .seat.occupied::after {
+          top: -30px;
+          width: 24px;
+          height: 28px;
+        }
+
+        .seat.occupied::before {
+          top: -10px;
+          width: 42px;
+          height: 28px;
         }
 
         .seat-row {
-          gap: 4px;
+          gap: 10px;
         }
       }
 
