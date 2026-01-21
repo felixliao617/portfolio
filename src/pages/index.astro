@@ -626,8 +626,6 @@ const siteConfig = {
         position: absolute;
         left: 50%;
         top: 50%;
-        width: min(55vw, 600px);
-        max-height: 70vh;
         transform-style: preserve-3d;
         cursor: pointer;
         transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
@@ -635,18 +633,16 @@ const siteConfig = {
 
       .gallery-frame .frame-border {
         background: #111;
-        padding: 10px;
+        padding: 12px;
         box-shadow:
           0 4px 30px rgba(0, 0, 0, 0.8),
           0 0 80px rgba(0, 0, 0, 0.5);
         border-radius: 2px;
-        display: inline-block;
       }
 
       .gallery-frame img {
-        max-height: 65vh;
+        height: 60vh;
         width: auto;
-        max-width: 55vw;
         display: block;
         border-radius: 1px;
       }
