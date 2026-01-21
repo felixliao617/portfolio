@@ -867,7 +867,7 @@ const siteConfig = {
         code: 'Software Engineering'
       };
 
-      function openPanel(category: string) {
+      function openPanel(category: string, addHistory: boolean = true) {
         contentSections.forEach(section => {
           section.hidden = true;
         });
@@ -889,9 +889,14 @@ const siteConfig = {
         }, 200);
 
         document.body.style.overflow = 'hidden';
+
+        // Add to browser history
+        if (addHistory) {
+          history.pushState({ panel: category }, '', `#${category}`);
+        }
       }
 
-      function closePanel() {
+      function closePanel(goBack: boolean = false) {
         panel?.classList.remove('active');
         panel?.setAttribute('aria-hidden', 'true');
 
@@ -900,6 +905,11 @@ const siteConfig = {
         }, 300);
 
         document.body.style.overflow = '';
+
+        // Update URL
+        if (!goBack && window.location.hash) {
+          history.pushState({ panel: null }, '', window.location.pathname);
+        }
       }
 
       iconNodes.forEach(el => {
@@ -909,7 +919,22 @@ const siteConfig = {
         });
       });
 
-      panelClose?.addEventListener('click', closePanel);
+      panelClose?.addEventListener('click', () => closePanel());
+
+      // Handle browser back button
+      window.addEventListener('popstate', (e) => {
+        if (e.state?.panel) {
+          openPanel(e.state.panel, false);
+        } else {
+          closePanel(true);
+        }
+      });
+
+      // Check URL hash on page load
+      const initialHash = window.location.hash.slice(1);
+      if (initialHash && ['photography', 'video', 'code'].includes(initialHash)) {
+        openPanel(initialHash, false);
+      }
 
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
