@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "title": "Dungeon Fighter Squad",
+    "description": "A dungeon-crawling action game built with Unity. Players fight through procedurally generated levels with squad-based combat mechanics.",
+    "tech": ["C#", "Unity"],
+    "github": "https://github.com/fnnikita/Dungeon-Fighter-Squad",
+    "demo": null
+  },
+  {
+    "id": 2,
+    "title": "GlassTrend",
+    "description": "Web application for analyzing and visualizing trend data. Features interactive charts and responsive design.",
+    "tech": ["JavaScript", "HTML", "CSS"],
+    "github": "https://github.com/fnnikita/GlassTrend",
+    "demo": null
+  }
+]
