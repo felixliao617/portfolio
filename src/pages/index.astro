@@ -629,6 +629,8 @@ const siteConfig = {
         transform-style: preserve-3d;
         cursor: pointer;
         transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        width: auto;
+        height: auto;
       }
 
       .gallery-frame .frame-border {
@@ -638,16 +640,15 @@ const siteConfig = {
           0 4px 30px rgba(0, 0, 0, 0.8),
           0 0 80px rgba(0, 0, 0, 0.5);
         border-radius: 2px;
+        display: block;
+        width: fit-content;
       }
 
       .gallery-frame img {
-        max-height: 60vh;
-        max-width: 75vw;
-        width: auto;
-        height: auto;
         display: block;
         border-radius: 1px;
-        object-fit: contain;
+        height: 55vh;
+        width: auto;
       }
 
       .gallery-frame .frame-label {
@@ -734,8 +735,8 @@ const siteConfig = {
           min-height: 400px;
         }
 
-        .gallery-frame {
-          width: 260px;
+        .gallery-frame img {
+          height: 40vh;
         }
 
         .gallery-hint {
