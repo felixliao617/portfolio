@@ -641,10 +641,13 @@ const siteConfig = {
       }
 
       .gallery-frame img {
-        height: 60vh;
+        max-height: 60vh;
+        max-width: 75vw;
         width: auto;
+        height: auto;
         display: block;
         border-radius: 1px;
+        object-fit: contain;
       }
 
       .gallery-frame .frame-label {
