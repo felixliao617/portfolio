@@ -195,25 +195,92 @@ const siteConfig = {
           </div>
         </div>
 
-        <!-- Video Content -->
+        <!-- Video Content - Cinema Style -->
         <div class="content-section" id="content-video" hidden>
-          <div class="video-grid">
-            {videos.map((video) => (
-              <a href={video.url} class="video-card" target="_blank" rel="noopener noreferrer">
-                <div class="video-thumbnail">
-                  <img src={video.thumbnail} alt={video.title} loading="lazy" />
-                  <div class="video-play">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="white">
-                      <polygon points="5 3 19 12 5 21 5 3"/>
-                    </svg>
+          <div class="cinema">
+            <!-- Cinema ambient light -->
+            <div class="cinema-glow"></div>
+
+            <!-- Screen area -->
+            <div class="cinema-screen-container">
+              {videos.map((video, index) => (
+                <div class="cinema-screen" data-index={index} data-video-id={video.url.split('v=')[1]?.split('&')[0] || ''}>
+                  <div class="screen-frame">
+                    <img src={video.thumbnail} alt={video.title} class="screen-thumbnail" />
+                    <button class="screen-play-btn" aria-label="Play video">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="white">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                      </svg>
+                    </button>
+                    <div class="screen-video" hidden>
+                      <iframe
+                        width="100%"
+                        height="100%"
+                        src=""
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                      </iframe>
+                    </div>
+                  </div>
+                  <div class="screen-info">
+                    <h3>{video.title}</h3>
+                    <p>{video.description}</p>
                   </div>
                 </div>
-                <div class="video-info">
-                  <h3>{video.title}</h3>
-                  <p>{video.description}</p>
-                </div>
-              </a>
-            ))}
+              ))}
+            </div>
+
+            <!-- Cinema navigation -->
+            {videos.length > 1 && (
+              <div class="cinema-nav">
+                <button class="cinema-nav-btn" id="cinemaPrev" aria-label="Previous">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m15 18-6-6 6-6"/>
+                  </svg>
+                </button>
+                <span class="cinema-counter"><span id="cinemaIndex">1</span> / {videos.length}</span>
+                <button class="cinema-nav-btn" id="cinemaNext" aria-label="Next">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m9 18 6-6-6-6"/>
+                  </svg>
+                </button>
+              </div>
+            )}
+
+            <!-- Cinema seats -->
+            <div class="cinema-seats">
+              <div class="seat-row seat-row-1">
+                <div class="seat"></div>
+                <div class="seat"></div>
+                <div class="seat"></div>
+                <div class="seat occupied"></div>
+                <div class="seat"></div>
+                <div class="seat"></div>
+                <div class="seat"></div>
+              </div>
+              <div class="seat-row seat-row-2">
+                <div class="seat"></div>
+                <div class="seat"></div>
+                <div class="seat occupied"></div>
+                <div class="seat occupied"></div>
+                <div class="seat occupied"></div>
+                <div class="seat"></div>
+                <div class="seat"></div>
+                <div class="seat"></div>
+              </div>
+              <div class="seat-row seat-row-3">
+                <div class="seat"></div>
+                <div class="seat"></div>
+                <div class="seat"></div>
+                <div class="seat occupied you"></div>
+                <div class="seat"></div>
+                <div class="seat"></div>
+                <div class="seat"></div>
+                <div class="seat"></div>
+                <div class="seat"></div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -743,65 +810,294 @@ const siteConfig = {
         }
       }
 
-      /* Video Grid */
-      .video-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-        gap: var(--space-lg);
+      /* Cinema Styles */
+      .panel:has(#content-video:not([hidden])) {
+        background: #0a0a0a;
+        padding: 0;
       }
 
-      .video-card {
-        border-radius: var(--radius-md);
-        overflow: hidden;
-        background: var(--color-border);
-        transition: all var(--transition-fast);
+      .panel:has(#content-video:not([hidden])) .panel-header {
+        display: none;
       }
 
-      .video-card:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-lg);
+      .panel:has(#content-video:not([hidden])) .panel-close {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
       }
 
-      .video-thumbnail {
-        aspect-ratio: 16/9;
+      .panel:has(#content-video:not([hidden])) .panel-close:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .cinema {
         position: relative;
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 50%, #0a0a0a 100%);
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding-top: 8vh;
       }
 
-      .video-thumbnail img {
+      .cinema-glow {
+        position: absolute;
+        top: 15%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70%;
+        height: 40%;
+        background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+        pointer-events: none;
+      }
+
+      .cinema-screen-container {
+        position: relative;
+        width: 75%;
+        max-width: 1000px;
+        z-index: 10;
+      }
+
+      .cinema-screen {
+        display: none;
+      }
+
+      .cinema-screen.active {
+        display: block;
+      }
+
+      .screen-frame {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 16/9;
+        background: #000;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow:
+          0 0 0 4px #1a1a1a,
+          0 0 0 6px #2a2a2a,
+          0 20px 60px rgba(0, 0, 0, 0.8),
+          0 0 100px rgba(255, 255, 255, 0.03);
+      }
+
+      .screen-thumbnail {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transition: opacity 0.3s ease;
       }
 
-      .video-play {
+      .screen-play-btn {
         position: absolute;
-        inset: 0;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: rgba(234, 67, 53, 0.9);
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(0,0,0,0.3);
-        opacity: 0;
-        transition: opacity var(--transition-fast);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 30px rgba(234, 67, 53, 0.4);
       }
 
-      .video-card:hover .video-play {
-        opacity: 1;
+      .screen-play-btn:hover {
+        transform: translate(-50%, -50%) scale(1.1);
+        background: rgba(234, 67, 53, 1);
+        box-shadow: 0 8px 40px rgba(234, 67, 53, 0.6);
       }
 
-      .video-info {
-        padding: var(--space-md);
+      .screen-play-btn svg {
+        margin-left: 8px;
       }
 
-      .video-info h3 {
-        font-size: 1rem;
+      .screen-video {
+        position: absolute;
+        inset: 0;
+      }
+
+      .screen-video iframe {
+        width: 100%;
+        height: 100%;
+      }
+
+      .screen-info {
+        text-align: center;
+        margin-top: 24px;
+        color: white;
+      }
+
+      .screen-info h3 {
+        font-size: 1.25rem;
         font-weight: 600;
-        margin-bottom: var(--space-xs);
+        margin-bottom: 8px;
+        color: rgba(255, 255, 255, 0.9);
       }
 
-      .video-info p {
-        font-size: 0.875rem;
-        color: var(--color-text-muted);
+      .screen-info p {
+        font-size: 0.9375rem;
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      /* Cinema Navigation */
+      .cinema-nav {
+        display: flex;
+        align-items: center;
+        gap: var(--space-lg);
+        margin-top: 24px;
+        z-index: 10;
+      }
+
+      .cinema-nav-btn {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        transition: all var(--transition-fast);
+      }
+
+      .cinema-nav-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: scale(1.1);
+      }
+
+      .cinema-counter {
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9375rem;
+        font-weight: 500;
+        min-width: 60px;
+        text-align: center;
+      }
+
+      /* Cinema Seats */
+      .cinema-seats {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 25vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .seat-row {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        padding: 0 10%;
+      }
+
+      .seat-row-1 {
+        margin-bottom: -15px;
+        transform: scale(0.75);
+        opacity: 0.4;
+      }
+
+      .seat-row-2 {
+        margin-bottom: -10px;
+        transform: scale(0.85);
+        opacity: 0.6;
+      }
+
+      .seat-row-3 {
+        transform: scale(1);
+        opacity: 0.9;
+      }
+
+      .seat {
+        width: 40px;
+        height: 50px;
+        background: #1a1a1a;
+        border-radius: 8px 8px 4px 4px;
+        position: relative;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+      }
+
+      .seat::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30px;
+        height: 8px;
+        background: #111;
+        border-radius: 4px;
+      }
+
+      .seat::after {
+        content: '';
+        position: absolute;
+        top: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 28px;
+        height: 20px;
+        background: #222;
+        border-radius: 4px 4px 0 0;
+      }
+
+      .seat.occupied::after {
+        background: #333;
+        height: 25px;
+        top: 3px;
+        border-radius: 50% 50% 4px 4px;
+      }
+
+      .seat.you {
+        position: relative;
+      }
+
+      .seat.you::before {
+        box-shadow: 0 0 15px rgba(234, 67, 53, 0.5);
+      }
+
+      /* Responsive Cinema */
+      @media (max-width: 768px) {
+        .cinema {
+          padding-top: 12vh;
+        }
+
+        .cinema-screen-container {
+          width: 90%;
+        }
+
+        .screen-play-btn {
+          width: 70px;
+          height: 70px;
+        }
+
+        .screen-play-btn svg {
+          width: 40px;
+          height: 40px;
+        }
+
+        .cinema-seats {
+          height: 18vh;
+        }
+
+        .seat {
+          width: 28px;
+          height: 35px;
+        }
+
+        .seat-row {
+          gap: 4px;
+        }
       }
 
       /* Projects Grid */
@@ -1214,6 +1510,101 @@ const siteConfig = {
           }
         }, 50);
       }, { passive: false });
+
+      // Cinema functionality
+      const cinemaScreens = document.querySelectorAll('.cinema-screen');
+      const playButtons = document.querySelectorAll('.screen-play-btn');
+      let currentCinemaIndex = 0;
+
+      // Initialize first screen as active
+      function updateCinemaScreens() {
+        cinemaScreens.forEach((screen, index) => {
+          if (index === currentCinemaIndex) {
+            screen.classList.add('active');
+          } else {
+            screen.classList.remove('active');
+            // Stop video when switching
+            const videoContainer = screen.querySelector('.screen-video') as HTMLElement;
+            const iframe = screen.querySelector('iframe');
+            if (videoContainer && iframe) {
+              videoContainer.hidden = true;
+              iframe.src = '';
+            }
+            const thumbnail = screen.querySelector('.screen-thumbnail') as HTMLElement;
+            const playBtn = screen.querySelector('.screen-play-btn') as HTMLElement;
+            if (thumbnail) thumbnail.style.opacity = '1';
+            if (playBtn) playBtn.style.display = 'flex';
+          }
+        });
+
+        const cinemaIndexEl = document.getElementById('cinemaIndex');
+        if (cinemaIndexEl) {
+          cinemaIndexEl.textContent = String(currentCinemaIndex + 1);
+        }
+      }
+
+      // Initialize cinema
+      if (cinemaScreens.length > 0) {
+        updateCinemaScreens();
+      }
+
+      // Play button click - start video
+      playButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const screen = btn.closest('.cinema-screen');
+          if (!screen) return;
+
+          const videoId = screen.getAttribute('data-video-id');
+          const videoContainer = screen.querySelector('.screen-video') as HTMLElement;
+          const iframe = screen.querySelector('iframe') as HTMLIFrameElement;
+          const thumbnail = screen.querySelector('.screen-thumbnail') as HTMLElement;
+          const playBtn = btn as HTMLElement;
+
+          if (videoId && iframe) {
+            // Set YouTube embed URL with autoplay
+            iframe.src = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+
+            // Hide thumbnail and play button, show video
+            if (thumbnail) thumbnail.style.opacity = '0';
+            playBtn.style.display = 'none';
+            if (videoContainer) videoContainer.hidden = false;
+          }
+        });
+      });
+
+      // Cinema navigation
+      const cinemaPrev = document.getElementById('cinemaPrev');
+      const cinemaNext = document.getElementById('cinemaNext');
+
+      cinemaPrev?.addEventListener('click', () => {
+        currentCinemaIndex = (currentCinemaIndex - 1 + cinemaScreens.length) % cinemaScreens.length;
+        updateCinemaScreens();
+      });
+
+      cinemaNext?.addEventListener('click', () => {
+        currentCinemaIndex = (currentCinemaIndex + 1) % cinemaScreens.length;
+        updateCinemaScreens();
+      });
+
+      // Stop video when closing panel
+      const originalClosePanel = closePanel;
+      closePanel = function(goBack: boolean = false) {
+        // Stop all cinema videos
+        cinemaScreens.forEach((screen) => {
+          const videoContainer = screen.querySelector('.screen-video') as HTMLElement;
+          const iframe = screen.querySelector('iframe');
+          if (videoContainer && iframe) {
+            videoContainer.hidden = true;
+            iframe.src = '';
+          }
+          const thumbnail = screen.querySelector('.screen-thumbnail') as HTMLElement;
+          const playBtn = screen.querySelector('.screen-play-btn') as HTMLElement;
+          if (thumbnail) thumbnail.style.opacity = '1';
+          if (playBtn) playBtn.style.display = 'flex';
+        });
+
+        originalClosePanel(goBack);
+      };
     </script>
   </body>
 </html>
